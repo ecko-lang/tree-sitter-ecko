@@ -1,0 +1,20 @@
+{
+  "name": "tree-sitter-ecko",
+  "version": "0.74.1",
+  "description": "Tree-sitter grammar for the Ecko language",
+  "homepage": "https://ecko.sh",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ecko-lang/tree-sitter-ecko.git"
+  },
+  "license": "MIT",
+  "keywords": ["tree-sitter", "parser", "ecko"],
+  "files": ["grammar.js", "tree-sitter.json", "queries/*", "src/**", "LICENSE"],
+  "scripts": {
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test && node test/highlights.js"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "0.25.10"
+  }
+}

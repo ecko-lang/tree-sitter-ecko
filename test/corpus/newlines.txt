@@ -1,0 +1,213 @@
+============================================================
+A newline ends a statement
+============================================================
+
+a = f
+(b, c) = pair
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (identifier))
+  (destructuring_assignment
+    (destructuring_pattern
+      (identifier)
+      (identifier))
+    (identifier)))
+
+============================================================
+A leading |> continues the statement
+============================================================
+
+xs = [1, 2]
+    |> map(fn(x) x * 2)
+    |> sort
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (pipeline_expression
+      (pipeline_expression
+        (list
+          (integer)
+          (integer))
+        (call_expression
+          (identifier)
+          (arguments
+            (lambda
+              (parameters
+                (parameter
+                  (identifier)))
+              (binary_expression
+                (identifier)
+                (integer))))))
+      (identifier))))
+
+============================================================
+A leading . continues the statement
+============================================================
+
+y = obj
+    .field
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (field_expression
+      (identifier)
+      (identifier))))
+
+============================================================
+else, catch and finally may start a line
+============================================================
+
+if a { 1 }
+else { 2 }
+try { risky() }
+catch (e) { 0 }
+finally { done() }
+
+------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (if_expression
+      (identifier)
+      (block
+        (expression_statement
+          (integer)))
+      (block
+        (expression_statement
+          (integer)))))
+  (expression_statement
+    (try_expression
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments))))
+      (catch_clause
+        (identifier)
+        (block
+          (expression_statement
+            (integer))))
+      (finally_clause
+        (block
+          (expression_statement
+            (call_expression
+              (identifier)
+              (arguments))))))))
+
+============================================================
+A trailing operator continues the statement
+============================================================
+
+total = a +
+    b
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (binary_expression
+      (identifier)
+      (identifier))))
+
+============================================================
+Newlines inside parentheses do not count
+============================================================
+
+g(1,
+  2)
+
+------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (integer)
+        (integer)))))
+
+============================================================
+Semicolons separate statements
+============================================================
+
+for i in 0..3 { a(i); b(i) }
+
+------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (for_expression
+      (identifier)
+      (range_expression
+        (integer)
+        (integer))
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments
+              (identifier))))
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments
+              (identifier))))))))
+
+============================================================
+A comment line before a continuation
+============================================================
+
+xs = items
+    # keep the big ones
+    |> filter(big)
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (pipeline_expression
+      (identifier)
+      (comment)
+      (call_expression
+        (identifier)
+        (arguments
+          (identifier))))))
+
+============================================================
+A union type may continue with a leading bar
+============================================================
+
+type Shape = Circle { r: Int }
+    | Square { side: Int }
+
+------------------------------------------------------------
+
+(source_file
+  (type_definition
+    (identifier)
+    (variant
+      (identifier)
+      (variant_fields
+        (variant_field
+          (identifier)
+          (type_name
+            (identifier)))))
+    (variant
+      (identifier)
+      (variant_fields
+        (variant_field
+          (identifier)
+          (type_name
+            (identifier)))))))

@@ -1,0 +1,246 @@
+============================================================
+Bindings and assignment
+============================================================
+
+let PI = 3.14
+mut total = 0.5m
+let mut n: Int = 1
+let (a, b) = pair
+total += 1
+xs[0] = 2
+obj.f = 3
+
+------------------------------------------------------------
+
+(source_file
+  (let_declaration
+    (identifier)
+    (float))
+  (let_declaration
+    (identifier)
+    (decimal))
+  (let_declaration
+    (identifier)
+    (type_name
+      (identifier))
+    (integer))
+  (let_declaration
+    (destructuring_pattern
+      (identifier)
+      (identifier))
+    (identifier))
+  (compound_assignment
+    (identifier)
+    (integer))
+  (assignment
+    (index_expression
+      (identifier)
+      (integer))
+    (integer))
+  (assignment
+    (field_expression
+      (identifier)
+      (identifier))
+    (integer)))
+
+============================================================
+Functions, attributes and parameters
+============================================================
+
+## Doc comment.
+@requires(n > 0)
+@ensures(result >= 0)
+async fn fetch(@untrusted q, n: Int = 1) -> Int? { await go(q) }
+fn sq(x) = x * x
+
+------------------------------------------------------------
+
+(source_file
+  (comment)
+  (function_definition
+    (attribute
+      (attribute_name)
+      (binary_expression
+        (identifier)
+        (integer)))
+    (attribute
+      (attribute_name)
+      (binary_expression
+        (identifier)
+        (integer)))
+    (identifier)
+    (parameters
+      (parameter
+        (untrusted)
+        (identifier))
+      (parameter
+        (identifier)
+        (type_name
+          (identifier))
+        (integer)))
+    (optional_type
+      (type_name
+        (identifier)))
+    (block
+      (expression_statement
+        (await_expression
+          (call_expression
+            (identifier)
+            (arguments
+              (identifier)))))))
+  (function_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)))
+    (binary_expression
+      (identifier)
+      (identifier))))
+
+============================================================
+Types
+============================================================
+
+type User { name: String, age: Int = 0 }
+type Mood = Happy | Sad
+type Box = Box { items: List<Int>, meta: {k: String} }
+
+------------------------------------------------------------
+
+(source_file
+  (type_definition
+    (identifier)
+    (variant_fields
+      (variant_field
+        (identifier)
+        (type_name
+          (identifier)))
+      (variant_field
+        (identifier)
+        (type_name
+          (identifier))
+        (integer))))
+  (type_definition
+    (identifier)
+    (variant
+      (identifier))
+    (variant
+      (identifier)))
+  (type_definition
+    (identifier)
+    (variant
+      (identifier)
+      (variant_fields
+        (variant_field
+          (identifier)
+          (generic_type
+            (identifier)
+            (type_name
+              (identifier))))
+        (variant_field
+          (identifier)
+          (record_type
+            (identifier)
+            (type_name
+              (identifier))))))))
+
+============================================================
+Imports and exports
+============================================================
+
+import std.json
+import "./lib.ecko" as lib
+import std.math { sqrt, pi as PI }
+export * from "./impl.ecko"
+export { a, b as c } from "./x.ecko"
+export import std.str
+export fn f() = 1
+export VERSION = "1"
+
+------------------------------------------------------------
+
+(source_file
+  (import_statement
+    (module_path
+      (identifier)
+      (identifier)))
+  (import_statement
+    (string)
+    (identifier))
+  (import_statement
+    (module_path
+      (identifier)
+      (identifier))
+    (import_list
+      (import_item
+        (identifier))
+      (import_item
+        (identifier)
+        (identifier))))
+  (export_statement
+    (string))
+  (export_statement
+    (import_list
+      (import_item
+        (identifier))
+      (import_item
+        (identifier)
+        (identifier)))
+    (string))
+  (export_statement
+    (module_path
+      (identifier)
+      (identifier)))
+  (export_statement
+    (function_definition
+      (identifier)
+      (parameters)
+      (integer)))
+  (export_statement
+    (assignment
+      (identifier)
+      (string))))
+
+============================================================
+Loops and jumps
+============================================================
+
+for (k, v) in m { unless v { continue } }
+while n > 0 { n -= 1 }
+loop { break 1 }
+fn f() { return }
+
+------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (for_expression
+      (destructuring_pattern
+        (identifier)
+        (identifier))
+      (identifier)
+      (block
+        (expression_statement
+          (unless_expression
+            (identifier)
+            (block
+              (continue_statement)))))))
+  (expression_statement
+    (while_expression
+      (binary_expression
+        (identifier)
+        (integer))
+      (block
+        (compound_assignment
+          (identifier)
+          (integer)))))
+  (expression_statement
+    (loop_expression
+      (block
+        (break_statement
+          (integer)))))
+  (function_definition
+    (identifier)
+    (parameters)
+    (block
+      (return_statement))))

@@ -1,0 +1,204 @@
+============================================================
+A brace right before the closing quote is literal
+============================================================
+
+xs = ["{", "}"]
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (list
+      (string)
+      (string))))
+
+============================================================
+A literal hole followed by more text is a hole
+============================================================
+
+a = "a {"}"} b"
+c = "{"}"} b"
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (string
+      (interpolation
+        (string))))
+  (assignment
+    (identifier)
+    (string
+      (interpolation
+        (string)))))
+
+============================================================
+A hole may hold a call with a string
+============================================================
+
+d = "x {get(m, "k")} y"
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (string
+      (interpolation
+        (call_expression
+          (identifier)
+          (arguments
+            (identifier)
+            (string)))))))
+
+============================================================
+An unmatched brace is text
+============================================================
+
+b = "a{b"
+print(1)
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (string))
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (integer)))))
+
+============================================================
+Single-quoted strings interpolate
+============================================================
+
+e = 'n={n}'
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (string
+      (interpolation
+        (identifier)))))
+
+============================================================
+Escapes, raw, bytes and triple-quoted strings
+============================================================
+
+s = "caf\u{e9} \{x}"
+w = r"""a "b" c"""
+r = r"^[A-Z]{3}$"
+b = b"\x00ab"
+t = """
+  {name}
+  """
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (string
+      (escape_sequence)
+      (escape_sequence)))
+  (assignment
+    (identifier)
+    (raw_string))
+  (assignment
+    (identifier)
+    (raw_string))
+  (assignment
+    (identifier)
+    (byte_string
+      (escape_sequence)))
+  (assignment
+    (identifier)
+    (string
+      (interpolation
+        (identifier)))))
+
+============================================================
+An escaped quote inside a hole
+============================================================
+
+print("ok: {fs.exists(work + \"/a.txt\")}")
+
+------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (string
+          (interpolation
+            (call_expression
+              (field_expression
+                (identifier)
+                (identifier))
+              (arguments
+                (binary_expression
+                  (identifier)
+                  (escaped_string))))))))))
+
+============================================================
+sql blocks bind holes, not SQL string braces
+============================================================
+
+q = sql { SELECT * FROM t WHERE s = '{x}' AND n = {n} }
+open = sql.open(":memory:")
+
+------------------------------------------------------------
+
+(source_file
+  (assignment
+    (identifier)
+    (sql_block
+      (sql_text)
+      (interpolation
+        (identifier))
+      (sql_text)))
+  (assignment
+    (identifier)
+    (call_expression
+      (field_expression
+        (identifier)
+        (identifier))
+      (arguments
+        (string)))))
+
+============================================================
+Template directives
+============================================================
+
+template greet(name) = "Hi {name}{for x in xs}- {x}{end}{if ok}y{else}n{end}{input name}"
+
+------------------------------------------------------------
+
+(source_file
+  (template_definition
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)))
+    (template_string
+      (interpolation
+        (identifier))
+      (template_directive
+        (identifier)
+        (identifier))
+      (interpolation
+        (identifier))
+      (template_directive)
+      (template_directive
+        (identifier))
+      (template_directive)
+      (template_directive)
+      (template_directive
+        (identifier)))))

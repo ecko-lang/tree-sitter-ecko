@@ -1,0 +1,58 @@
+## Fetch a user.
+# <- comment.doc
+@requires(id > 0)
+# <- attribute
+#^ attribute
+fn fetch(id: Int) -> User? = db.get(id)
+# <- keyword
+#  ^ function
+#        ^ variable.parameter
+#            ^ type
+#                    ^ type
+#                            ^ variable
+#                               ^ function.method
+mut total = 0.5m
+# <- keyword
+#           ^ number
+greeting = "Hi {name}, {"}"} done"
+#          ^ string
+#              ^ punctuation.special
+#               ^ variable
+pair = ["{", "}"]
+#       ^ string
+#        ^ string
+q = sql { SELECT n FROM t WHERE id = {id} }
+#   ^ keyword
+#         ^ string.special
+#                                    ^ punctuation.special
+r = ai[Mood] "classify" votes 3
+#   ^ keyword
+#      ^ type
+#                       ^ keyword
+for x in xs { if x == null { continue } }
+# <- keyword.control
+#     ^ keyword.control
+#                     ^ constant
+#                            ^ keyword.control
+u = User { name: "Ada" }
+#   ^ type
+#          ^ property
+print(MAX_SIZE, enabled: true)
+# <- function
+#     ^ constant
+#               ^ property
+#                        ^ boolean
+import std.json
+# <- keyword
+#          ^ type
+type Shape = Circle { r: Int } | Square
+# <- keyword
+#    ^ type
+#            ^ type
+#                     ^ property
+#                              ^ operator
+x = a |> b ?? c and not d
+#     ^ operator
+#          ^ operator
+#               ^ keyword.operator
+#                   ^ keyword.operator
